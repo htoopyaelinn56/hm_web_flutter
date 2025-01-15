@@ -1,3 +1,3 @@
 # hm_web_flutter
 
-A new Flutter project.
+Showcase for H&M Cosmetic Shop using Flutter 
