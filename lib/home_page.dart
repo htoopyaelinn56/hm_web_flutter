@@ -29,30 +29,35 @@ class _HomePageState extends ConsumerState<HomePage> {
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: itemDataValue.when(
           data: (data) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: 10),
-                  GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate: isMobileDevice(context)
-                        ? SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, mainAxisExtent: 250)
-                        : SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 350, mainAxisExtent: 320),
-                    itemBuilder: (context, index) {
-                      final item = data[index];
-                      return ItemCard(
-                        item: item,
-                        onClick: () {
-                          context.go('/detail/${item.id}');
-                        },
-                      );
-                    },
-                    itemCount: data.length,
-                  ),
-                ],
+            return RefreshIndicator(
+              onRefresh: () async{
+                await ref.refresh(getItemsProvider.future);
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 10),
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: isMobileDevice(context)
+                          ? SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, mainAxisExtent: 250)
+                          : SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 350, mainAxisExtent: 320),
+                      itemBuilder: (context, index) {
+                        final item = data[index];
+                        return ItemCard(
+                          item: item,
+                          onClick: () {
+                            context.go('/detail/${item.id}');
+                          },
+                        );
+                      },
+                      itemCount: data.length,
+                    ),
+                  ],
+                ),
               ),
             );
           },

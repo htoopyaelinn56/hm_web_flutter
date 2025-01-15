@@ -58,8 +58,10 @@ final getItemsProvider = FutureProvider<List<ItemData>>((ref) async {
   return ref.watch(itemRepositoryProvider).getItems();
 });
 
+/// todo fetch directly from AppWrite later
 final getItemDetailProvider =
     FutureProvider.family.autoDispose<ItemData, String>((ref, arg) async {
   final list = await ref.watch(getItemsProvider.future);
+  await Future.delayed(const Duration(milliseconds: 600));
   return list.where((e) => e.id == arg).first;
 });

@@ -28,80 +28,85 @@ class _DetailPageState extends ConsumerState<DetailPage> {
         padding: EdgeInsets.symmetric(horizontal: 15).copyWith(bottom: 15),
         child: itemDataValue.when(
           data: (data) {
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Product Image
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: isMobileDevice(context) ? 1 : 0,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            side: BorderSide(width: 1.5),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: CachedNetworkImage(
-                              imageUrl: data.image,
-                              imageRenderMethodForWeb:
-                                  ImageRenderMethodForWeb.HttpGet,
-                              fit: BoxFit.cover,
-                              width: isMobileDevice(context)
-                                  ? MediaQuery.sizeOf(context).width
-                                  : 350,
-                              height: 350,
-                              placeholder: (context, url) => Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.error,
+            return RefreshIndicator(
+              onRefresh: () async{
+                await ref.refresh(getItemDetailProvider(widget.id).future);
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Product Image
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: isMobileDevice(context) ? 1 : 0,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              side: BorderSide(width: 1.5),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(14),
+                              child: CachedNetworkImage(
+                                imageUrl: data.image,
+                                imageRenderMethodForWeb:
+                                    ImageRenderMethodForWeb.HttpGet,
+                                fit: BoxFit.cover,
+                                width: isMobileDevice(context)
+                                    ? MediaQuery.sizeOf(context).width
+                                    : 350,
+                                height: 350,
+                                placeholder: (context, url) => Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.error,
+                                ),
                               ),
                             ),
                           ),
                         ),
+                      ],
+                    ),
+
+                    // Spacing
+                    const SizedBox(height: 12),
+
+                    // Product Title
+                    Text(
+                      data.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
-
-                  // Spacing
-                  const SizedBox(height: 12),
-
-                  // Product Title
-                  Text(
-                    data.name,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
 
-                  // Spacing
-                  const SizedBox(height: 12),
+                    // Spacing
+                    const SizedBox(height: 12),
 
-                  // Product Price
-                  Text(
-                    '${formatNumber(data.price)} Ks',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                    // Product Price
+                    Text(
+                      '${formatNumber(data.price)} Ks',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
 
-                  // Spacing
-                  const SizedBox(height: 12),
+                    // Spacing
+                    const SizedBox(height: 12),
 
-                  // Product Description
-                  Text(
-                    data.description,
-                    style: TextStyle(
-                      fontSize: 16,
-                      height: 1.25,
+                    // Product Description
+                    Text(
+                      data.description,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.25,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
