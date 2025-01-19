@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hm_web_flutter/utils.dart';
@@ -19,6 +20,15 @@ class _DetailPageState extends ConsumerState<DetailPage> {
   @override
   Widget build(BuildContext context) {
     final itemDataValue = ref.watch(getItemDetailProvider(widget.id));
+    if (kReleaseMode) {
+      return Material(
+          child: Center(
+            child: Text(
+              'Coming Soon',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ));
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('H&M'),

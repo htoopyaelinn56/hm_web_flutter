@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,17 +21,33 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final itemDataValue = ref.watch(getItemsProvider);
+    if (kReleaseMode) {
+      return Material(
+          child: Center(
+        child: Text(
+          'Coming Soon',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ));
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('H&M'),
         centerTitle: true,
+        actions: [
+          // to preload font for web
+          Text(
+            'က🕵️',
+            style: TextStyle(color: Colors.transparent),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: itemDataValue.when(
           data: (data) {
             return RefreshIndicator(
-              onRefresh: () async{
+              onRefresh: () async {
                 await ref.refresh(getItemsProvider.future);
               },
               child: SingleChildScrollView(

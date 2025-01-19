@@ -35,6 +35,13 @@ class _MainAppState extends ConsumerState<MainApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.purpleAccent),
+        scaffoldBackgroundColor: Color(0x57ffe3f1),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Color(0x57ffe3f1),
+          surfaceTintColor: Color(0x57ffe3f1),
+          scrolledUnderElevation: 0,
+          elevation: 0
+        ),
       ),
       routerConfig: ref.watch(goRouterProvider),
     );
